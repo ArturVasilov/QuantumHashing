@@ -1,6 +1,8 @@
 import algorithms.Algorithm;
 import algorithms.BruteForce;
-import algorithms.RandomBruteSearch;
+import algorithms.stochastic.AdaptiveRandomSearch;
+import algorithms.stochastic.RandomBruteSearch;
+import algorithms.stochastic.RandomSearch;
 import functions.Function;
 import functions.StandardQuantumHashFunction;
 
@@ -20,6 +22,8 @@ public class Main {
         System.out.println("Select algorithm:");
         System.out.println("Brute force - 1");
         System.out.println("Random brute search - 2");
+        System.out.println("Random search - 3");
+        System.out.println("Adaptive random search - 4");
         int algorithmCode = scanner.nextInt();
 
         int q = (int) Math.pow(2.0, 1.0 * n);
@@ -28,11 +32,24 @@ public class Main {
         Algorithm algorithm;
         switch (algorithmCode) {
             case 2: {
-                System.out.println("Please, enter number of random search iterations");
+                System.out.println("Please, enter number of stochastic search iterations:");
                 int iterations = scanner.nextInt();
-                algorithm = new RandomBruteSearch(function, iterations, n, q);
+                algorithm = new RandomBruteSearch(function, n, q, iterations);
                 break;
             }
+
+            case 3: {
+                System.out.println("Please, enter step size:");
+                int stepSize = scanner.nextInt();
+                algorithm = new RandomSearch(function, n, q, stepSize);
+                break;
+            }
+
+            case 4:
+                System.out.println("Please, enter step factor:");
+                double stepFactor = scanner.nextDouble();
+                algorithm = new AdaptiveRandomSearch(function, n, q, stepFactor);
+                break;
 
             case 1:
             default:

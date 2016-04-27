@@ -1,5 +1,6 @@
-package algorithms;
+package algorithms.stochastic;
 
+import algorithms.IteratedQuantumHashingAlgorithm;
 import functions.Function;
 
 import java.security.SecureRandom;
@@ -11,16 +12,17 @@ import java.util.Random;
 public class RandomBruteSearch extends IteratedQuantumHashingAlgorithm {
 
     private final Function function;
-    private final int iterations;
     private final int maxValue;
+    private final int iterations;
 
     private final Random random;
 
-    public RandomBruteSearch(Function function, int iterations, int maxParamsCount, int maxValue) {
+    public RandomBruteSearch(Function function, int maxParamsCount, int maxValue, int iterations) {
         super(maxParamsCount);
         this.function = function;
-        this.iterations = iterations;
         this.maxValue = maxValue;
+        this.iterations = iterations;
+
         random = new SecureRandom();
     }
 
