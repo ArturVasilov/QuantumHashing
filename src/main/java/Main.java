@@ -1,6 +1,7 @@
 import algorithms.Algorithm;
 import algorithms.BruteForce;
 import algorithms.stochastic.AdaptiveRandomSearch;
+import algorithms.stochastic.MultiRestartAdaptiveRandomSearch;
 import algorithms.stochastic.RandomBruteSearch;
 import algorithms.stochastic.RandomSearch;
 import functions.Function;
@@ -24,6 +25,7 @@ public class Main {
         System.out.println("Random brute search - 2");
         System.out.println("Random search - 3");
         System.out.println("Adaptive random search - 4");
+        System.out.println("Multi-restart adaptive random search - 5");
         int algorithmCode = scanner.nextInt();
 
         int q = (int) Math.pow(2.0, 1.0 * n);
@@ -49,6 +51,14 @@ public class Main {
                 System.out.println("Please, enter step factor:");
                 double stepFactor = scanner.nextDouble();
                 algorithm = new AdaptiveRandomSearch(function, n, q, stepFactor);
+                break;
+
+            case 5:
+                System.out.println("Please, enter step factor:");
+                double restartStepFactor = scanner.nextDouble();
+                System.out.println("Please, enter restarts count:");
+                int restartsCount = scanner.nextInt();
+                algorithm = new MultiRestartAdaptiveRandomSearch(function, n, q, restartStepFactor, restartsCount);
                 break;
 
             case 1:

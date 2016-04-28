@@ -2,6 +2,7 @@ package algorithms.stochastic;
 
 import algorithms.IteratedQuantumHashingAlgorithm;
 import functions.Function;
+import utils.OptimizationUtils;
 
 import java.security.SecureRandom;
 import java.util.Random;
@@ -30,48 +31,43 @@ public class AdaptiveRandomSearch extends IteratedQuantumHashingAlgorithm {
     @Override
     protected double findSolution(int size) {
         double[] params = new double[size];
+        double[] tempParams = new double[size];
+        double[] largeTempParams = new double[size];
         for (int i = 0; i < size; i++) {
             params[i] = random.nextInt(maxValue);
         }
+        System.arraycopy(params, 0, tempParams, 0, size);
+        System.arraycopy(params, 0, largeTempParams, 0, size);
+
         int step = 1;
 
         double result = function.calculate(params);
 
-        double[] largeParams = new double[size];
         int iterations = (int) Math.round(Math.pow(2, size) * 2);
         boolean improved;
         do {
             improved = false;
             for (int i = 0; i < iterations; i++) {
-                System.arraycopy(params, 0, largeParams, 0, size);
                 int largerStep = increasedStepSize(step);
-                for (int j = 0; j < size; j++) {
-                    if (params[j] + step > maxValue) {
-                        params[j] -= step;
-                    } else if (params[j] - step < 0) {
-                        params[j] += step;
-                    } else {
-                        params[j] += step * (random.nextBoolean() ? 1 : -1);
-                    }
+                OptimizationUtils.perturbateParams(tempParams, step, maxValue, random);
+                OptimizationUtils.perturbateParams(largeTempParams, largerStep, maxValue, random);
 
-                    if (largeParams[j] + largerStep > maxValue) {
-                        largeParams[j] -= largerStep;
-                    } else if (largeParams[j] - largerStep < 0) {
-                        largeParams[j] += largerStep;
-                    } else {
-                        largeParams[j] += largerStep * (random.nextBoolean() ? 1 : -1);
-                    }
-                }
                 double resultTemp = function.calculate(params);
-                double resultTempLarger = function.calculate(largeParams);
+                double resultTempLarger = function.calculate(largeTempParams);
                 if (resultTempLarger < resultTemp) {
                     step = largerStep;
-                    resultTemp = result;
+                    resultTemp = resultTempLarger;
+                    if (resultTemp < result) {
+                        System.arraycopy(largeTempParams, 0, tempParams, 0, size);
+                    }
                 }
                 if (resultTemp < result) {
                     result = resultTemp;
+                    System.arraycopy(tempParams, 0, params, 0, size);
                     improved = true;
                     break;
+                } else {
+                    System.arraycopy(params, 0, tempParams, 0, size);
                 }
             }
             if (!improved) {

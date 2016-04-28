@@ -2,6 +2,7 @@ package algorithms.stochastic;
 
 import algorithms.IteratedQuantumHashingAlgorithm;
 import functions.Function;
+import utils.OptimizationUtils;
 
 import java.security.SecureRandom;
 import java.util.Random;
@@ -13,15 +14,15 @@ public class RandomSearch extends IteratedQuantumHashingAlgorithm {
 
     private final Function function;
     private final int maxValue;
-    private final int stepSize;
+    private final int step;
 
     private final Random random;
 
-    public RandomSearch(Function function, int maxParamsCount, int maxValue, int stepSize) {
+    public RandomSearch(Function function, int maxParamsCount, int maxValue, int step) {
         super(maxParamsCount);
         this.function = function;
         this.maxValue = maxValue;
-        this.stepSize = stepSize;
+        this.step = step;
 
         random = new SecureRandom();
     }
@@ -29,9 +30,11 @@ public class RandomSearch extends IteratedQuantumHashingAlgorithm {
     @Override
     protected double findSolution(int size) {
         double[] params = new double[size];
+        double[] tempParams = new double[size];
         for (int i = 0; i < size; i++) {
             params[i] = random.nextInt(maxValue);
         }
+        System.arraycopy(params, 0, tempParams, 0, size);
 
         double result = function.calculate(params);
 
@@ -40,20 +43,15 @@ public class RandomSearch extends IteratedQuantumHashingAlgorithm {
         do {
             improved = false;
             for (int i = 0; i < iterations; i++) {
-                for (int j = 0; j < size; j++) {
-                    if (params[j] + stepSize > maxValue) {
-                        params[j] -= stepSize;
-                    } else if (params[j] - stepSize < 0) {
-                        params[j] += stepSize;
-                    } else {
-                        params[j] += stepSize * (random.nextBoolean() ? 1 : -1);
-                    }
-                }
-                double resultTemp = function.calculate(params);
+                OptimizationUtils.perturbateParams(tempParams, step, maxValue, random);
+                double resultTemp = function.calculate(tempParams);
                 if (resultTemp < result) {
                     result = resultTemp;
+                    System.arraycopy(tempParams, 0, params, 0, size);
                     improved = true;
                     break;
+                } else {
+                    System.arraycopy(params, 0, tempParams, 0, size);
                 }
             }
         } while (improved);
