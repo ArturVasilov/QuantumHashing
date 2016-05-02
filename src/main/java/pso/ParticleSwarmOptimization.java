@@ -31,7 +31,7 @@ public class ParticleSwarmOptimization extends IteratedQuantumHashingAlgorithm {
     protected double findSolution(int size) {
         ParticleSwarm swarm = new ParticleSwarm(particles, size, maxValue, random, function);
         swarm.findGlobalBest();
-        int iterations = 10;
+        int iterations = 200;
         for (int i = 0; i < iterations; i++) {
             swarm.updateParameters();
         }

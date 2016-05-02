@@ -27,8 +27,7 @@ public class Main {
         System.out.println("Random search - 3");
         System.out.println("Adaptive random search - 4");
         System.out.println("Multi-restart adaptive random search - 5");
-        System.out.println("Iterated adaptive random search - 6");
-        System.out.println("Particle swarm optimization - 7");
+        System.out.println("Particle swarm optimization - 6");
         int algorithmCode = scanner.nextInt();
 
         int q = (int) Math.pow(2.0, 1.0 * n);
@@ -64,7 +63,7 @@ public class Main {
                 algorithm = new MultiRestartAdaptiveRandomSearch(function, n, q, restartStepFactor, restartsCount);
                 break;
 
-            case 7:
+            case 6:
                 ((StandardQuantumHashFunction) function).setOptimizeCalculations(false);
                 System.out.println("Please, enter particles count:");
                 int particles = scanner.nextInt();
@@ -76,9 +75,8 @@ public class Main {
                 algorithm = new BruteForce(function, n, q);
         }
 
-        //System.out.println("Please, enter qubits count. Enter 0, if you want dynamic selection.");
-        //int qubits = scanner.nextInt();
-        int qubits = 0;
+        System.out.println("Please, enter qubits count. Enter 0, if you want dynamic selection.");
+        int qubits = scanner.nextInt();
         System.out.println("Result - " + (qubits == 0 ? algorithm.solution() : algorithm.solutionForFixedSize(qubits)));
         System.out.println("Running time - " + algorithm.runningTimeMs());
 
