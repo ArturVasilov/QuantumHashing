@@ -6,6 +6,7 @@ import algorithms.stochastic.RandomBruteSearch;
 import algorithms.stochastic.RandomSearch;
 import functions.Function;
 import functions.StandardQuantumHashFunction;
+import pso.ParticleSwarmOptimization;
 
 import java.util.Arrays;
 import java.util.Scanner;
@@ -26,6 +27,8 @@ public class Main {
         System.out.println("Random search - 3");
         System.out.println("Adaptive random search - 4");
         System.out.println("Multi-restart adaptive random search - 5");
+        System.out.println("Iterated adaptive random search - 6");
+        System.out.println("Particle swarm optimization - 7");
         int algorithmCode = scanner.nextInt();
 
         int q = (int) Math.pow(2.0, 1.0 * n);
@@ -61,16 +64,30 @@ public class Main {
                 algorithm = new MultiRestartAdaptiveRandomSearch(function, n, q, restartStepFactor, restartsCount);
                 break;
 
+            case 7:
+                ((StandardQuantumHashFunction) function).setOptimizeCalculations(false);
+                System.out.println("Please, enter particles count:");
+                int particles = scanner.nextInt();
+                algorithm = new ParticleSwarmOptimization(function, n, q, particles);
+                break;
+
             case 1:
             default:
                 algorithm = new BruteForce(function, n, q);
         }
 
-        System.out.println("Please, enter qubits count. Enter 0, if you want dynamic selection.");
-        int qubits = scanner.nextInt();
+        //System.out.println("Please, enter qubits count. Enter 0, if you want dynamic selection.");
+        //int qubits = scanner.nextInt();
+        int qubits = 0;
         System.out.println("Result - " + (qubits == 0 ? algorithm.solution() : algorithm.solutionForFixedSize(qubits)));
         System.out.println("Running time - " + algorithm.runningTimeMs());
-        System.out.println("Best params - " + Arrays.toString(function.bestParams()));
+
+        double[] best = function.bestParams();
+        int[] bestParams = new int[best.length];
+        for (int i = 0; i < best.length; i++) {
+            bestParams[i] = (int) best[i];
+        }
+        System.out.println("Best params - " + Arrays.toString(bestParams));
     }
 
 }

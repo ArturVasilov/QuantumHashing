@@ -39,6 +39,7 @@ public class RandomSearch extends IteratedQuantumHashingAlgorithm {
         double result = function.calculate(params);
 
         int iterations = (int) Math.round(Math.pow(2, size) * 2);
+        iterations = Math.min(iterations, 256);
         boolean improved;
         do {
             improved = false;
