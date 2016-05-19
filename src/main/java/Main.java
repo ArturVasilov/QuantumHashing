@@ -38,21 +38,21 @@ public class Main {
             case 2: {
                 System.out.println("Please, enter number of stochastic search iterations:");
                 int iterations = scanner.nextInt();
-                algorithm = new RandomBruteSearch(function, n, q, iterations);
+                algorithm = new RandomBruteSearch(function, q, q, iterations);
                 break;
             }
 
             case 3: {
                 System.out.println("Please, enter step size:");
                 int stepSize = scanner.nextInt();
-                algorithm = new RandomSearch(function, n, q, stepSize);
+                algorithm = new RandomSearch(function, q, q, stepSize);
                 break;
             }
 
             case 4:
                 System.out.println("Please, enter step factor:");
                 double stepFactor = scanner.nextDouble();
-                algorithm = new AdaptiveRandomSearch(function, n, q, stepFactor);
+                algorithm = new AdaptiveRandomSearch(function, q, q, stepFactor);
                 break;
 
             case 5:
@@ -60,23 +60,24 @@ public class Main {
                 double restartStepFactor = scanner.nextDouble();
                 System.out.println("Please, enter restarts count:");
                 int restartsCount = scanner.nextInt();
-                algorithm = new MultiRestartAdaptiveRandomSearch(function, n, q, restartStepFactor, restartsCount);
+                algorithm = new MultiRestartAdaptiveRandomSearch(function, q, q, restartStepFactor, restartsCount);
                 break;
 
             case 6:
                 ((StandardQuantumHashFunction) function).setOptimizeCalculations(false);
                 System.out.println("Please, enter particles count:");
                 int particles = scanner.nextInt();
-                algorithm = new ParticleSwarmOptimization(function, n, q, particles);
+                algorithm = new ParticleSwarmOptimization(function, q, q, particles);
                 break;
 
             case 1:
             default:
-                algorithm = new BruteForce(function, n, q);
+                algorithm = new BruteForce(function, q, q);
         }
 
         System.out.println("Please, enter qubits count. Enter 0, if you want dynamic selection.");
         int qubits = scanner.nextInt();
+        qubits = (int) Math.pow(2, qubits);
         System.out.println("Result - " + (qubits == 0 ? algorithm.solution() : algorithm.solutionForFixedSize(qubits)));
         System.out.println("Running time - " + algorithm.runningTimeMs());
 
