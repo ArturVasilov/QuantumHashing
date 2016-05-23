@@ -5,12 +5,12 @@ public class ConstructiveWay {
 
     public static void main(String[] args) {
         double eps = 0.05;
-        double d = eps * eps * Math.log(1 / eps);
-        double coef = Math.pow(1 / d, 1.25);
 
         for (int i = 2; i < 41; i++) {
-            double result = coef * Math.pow(1.0 * i, 1.25);
-            int qubits = Math.getExponent(result);
+            int pow = (int) Math.pow(2, i + 1);
+            double l = Math.log(pow) * 2 / (eps * eps);
+            int result = (int) Math.round(Math.log(l) / Math.log(2));
+            int qubits = result + 1;
             System.out.println(i + " - " + qubits);
         }
     }
